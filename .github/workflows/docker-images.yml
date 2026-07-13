@@ -67,6 +67,7 @@ jobs:
           # Set docker image tag
           IMAGE_TAG=${{ inputs.imageTag || github.ref_name }}
           IMAGE_NAMESPACE=${{ inputs.imageNamespace || vars.GHCR_NAMESPACE || github.repository_owner }}
+          IMAGE_NAMESPACE="${IMAGE_NAMESPACE,,}"
           if [[ -z "${IMAGE_NAMESPACE}" ]]; then
             echo "Set workflow input imageNamespace or repository variable GHCR_NAMESPACE" >&2
             exit 1
