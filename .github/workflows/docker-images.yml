@@ -132,9 +132,7 @@ jobs:
           build-args: |
             REACT_APP_ENV=production
             REACT_APP_COMMIT_ID="dev #${{ env.SHORT_SHA }}"
-          platforms: |
-            linux/amd64
-            linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ${{ env.FRONTEND_IMAGE_NAMES }}
 
@@ -144,9 +142,7 @@ jobs:
         with:
           file: ./deploy/docker/Dockerfile
           target: lowcoder-ce-node-service
-          platforms: |
-            linux/amd64
-            linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ${{ env.NODESERVICE_IMAGE_NAMES }}
 
@@ -156,8 +152,6 @@ jobs:
         with:
           file: ./deploy/docker/Dockerfile
           target: lowcoder-ce-api-service
-          platforms: |
-            linux/amd64
-            linux/arm64
+          platforms: linux/amd64
           push: true
           tags: ${{ env.APISERVICE_IMAGE_NAMES }}
