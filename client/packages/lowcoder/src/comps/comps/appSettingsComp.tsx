@@ -219,8 +219,9 @@ const childrenMap = {
   gridColumns: RangeControl.closed(1, 48, 24),
   gridRowHeight: RangeControl.closed(4, 100, 8),
   gridRowCount: withDefault(NumberControl, DEFAULT_ROW_COUNT),
-  gridPaddingX: withDefault(NumberControl, 20),
-  gridPaddingY: withDefault(NumberControl, 20),
+  gridPaddingX: withDefault(NumberControl, 0),
+  gridPaddingY: withDefault(NumberControl, 0),
+  gridStretchHeight: withDefault(BoolControl, false),
   gridBg: ColorControl,
   gridBgImage: StringControl,
   gridBgImageRepeat: StringControl,
@@ -342,6 +343,10 @@ function AppGeneralSettingsModal(props: ChildrenInstance) {
 
 function AppCanvasSettingsModal(props: ChildrenInstance) {
   const isPublicApp = useSelector(isPublicApplication);
+  const application = useSelector(currentApplication);
+  const isAggregation = !!application && isAggregationApp(
+    AppUILayoutType[application.applicationType]
+  );
   const {
     themeList,
     defaultTheme,
@@ -351,6 +356,7 @@ function AppCanvasSettingsModal(props: ChildrenInstance) {
     gridColumns,
     gridRowHeight,
     gridRowCount,
+    gridStretchHeight,
     gridPaddingX,
     gridPaddingY,
     gridBg,
@@ -397,7 +403,7 @@ function AppCanvasSettingsModal(props: ChildrenInstance) {
   return (
     <>
       <BaseSection
-        name={"Theme Settings"}
+        name={trans("appSetting.themeSettings")}
         width={288}
         noMargin
         style={{
@@ -454,7 +460,7 @@ function AppCanvasSettingsModal(props: ChildrenInstance) {
         }}
       >
         <DivStyled>
-          {maxWidth.propertyView({
+          {!isAggregation && maxWidth.propertyView({
             dropdownLabel: trans("appSetting.canvasMaxWidth"),
             inputLabel: trans("appSetting.userDefinedMaxWidth"),
             inputPlaceholder: trans("appSetting.inputUserDefinedPxValue"),
@@ -462,25 +468,28 @@ function AppCanvasSettingsModal(props: ChildrenInstance) {
             min: 350,
             lastNode: <span>{trans("appSetting.maxWidthTip")}</span>,
           })}
-          {gridColumns.propertyView({
+          {!isAggregation && gridColumns.propertyView({
             label: trans("appSetting.gridColumns"),
             placeholder: '24',
           })}
-          {gridRowHeight.propertyView({
+          {!isAggregation && gridRowHeight.propertyView({
             label: trans("appSetting.gridRowHeight"),
             placeholder: '8',
           })}
-          {gridRowCount.propertyView({
+          {!isAggregation && gridRowCount.propertyView({
             label: trans("appSetting.gridRowCount"),
             placeholder: 'Infinity',
           })}
+          {gridRowCount.getView() !== DEFAULT_ROW_COUNT && gridStretchHeight.propertyView({
+            label: "Stretch canvas to available height",
+          })}
           {gridPaddingX.propertyView({
             label: trans("appSetting.gridPaddingX"),
-            placeholder: '20',
+            placeholder: '0',
           })}
           {gridPaddingY.propertyView({
             label: trans("appSetting.gridPaddingY"),
-            placeholder: '20',
+            placeholder: '0',
           })}
           {gridBg.propertyView({
             label: trans("style.background"),

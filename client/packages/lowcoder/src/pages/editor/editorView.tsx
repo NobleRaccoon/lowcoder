@@ -116,6 +116,9 @@ const Height100Div = lazy(
   () => import('pages/common/styledComponent')
     .then(module => ({default: module.Height100Div}))
 );
+const PreviewContainer = styled.div`
+  height: 100%;
+`;
 const LeftPanel = lazy(
   () => import('pages/common/styledComponent')
     .then(module => ({default: module.LeftPanel}))
@@ -341,6 +344,10 @@ const aggregationSiderItems = [
     icon: <LeftSettingIcon />,
   },
   {
+    key: SiderKey.Canvas,
+    icon: <LeftColorPaletteIcon />,
+  },
+  {
     key: SiderKey.JS,
     icon: <LeftJSSettingIcon />,
   },
@@ -535,14 +542,14 @@ function EditorView(props: EditorViewProps) {
             deviceType={editorState.deviceType}
             deviceOrientation={editorState.deviceOrientation}
           >
-            <div id={PreviewContainerID}>
+            <PreviewContainer id={PreviewContainerID}>
               {uiComp.getView()}
-            </div>
+            </PreviewContainer>
         </DeviceWrapper>
       ) : (
-        <div id={PreviewContainerID}>
+        <PreviewContainer id={PreviewContainerID}>
           {uiComp.getView()}
-        </div>
+        </PreviewContainer>
       )
     )
   }, [
@@ -725,14 +732,11 @@ function EditorView(props: EditorViewProps) {
                       {menuKey === SiderKey.Canvas && (
                         <SettingsDiv>
                           <ScrollBar>
-                            {application &&
-                              !isAggregationApp(
-                                AppUILayoutType[application.applicationType]
-                              ) && (
-                                <>
-                                  {appSettingsComp.getPropertyView()}
-                                </>
-                              )}
+                            {application && (
+                              <>
+                                {appSettingsComp.getPropertyView()}
+                              </>
+                            )}
                           </ScrollBar>
                         </SettingsDiv>
                       )}
@@ -793,4 +797,3 @@ function EditorView(props: EditorViewProps) {
 export default React.memo(EditorView, (prevProps, newProps) => {
   return isEqual(prevProps, newProps);
 });
-
